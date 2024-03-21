@@ -94,11 +94,21 @@ namespace FirstFlightSrvice.Services
 
 
             };
-        async public Task<Flight> Book(string Id)
+        async public Task<Flight> Book(string id)
         {
-            var flight = firstFlights.FirstOrDefault(f => f.Id == Id);
-            if (flight != null && !flight.IsBooked)
-                flight.IsBooked = true;
+            var flight = firstFlights.FirstOrDefault(f => f.Id == id);
+            if (flight != null)
+            {
+                if (!flight.IsBooked)
+                {
+                    flight.IsBooked = true;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+               
             return flight;
         }
 
