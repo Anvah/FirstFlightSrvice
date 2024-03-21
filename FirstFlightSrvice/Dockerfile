@@ -3,18 +3,18 @@
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
+ENV ASPNETCORE_URLS http://+:80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["FirstFlightSrvice/FirstFlightSrvice.csproj", "FirstFlightSrvice/"]
-RUN dotnet restore "FirstFlightSrvice/FirstFlightSrvice.csproj"
+COPY FirstFlightSrvice.csproj FirstFlightSrvice.csproj
+RUN dotnet restore FirstFlightSrvice.csproj
 COPY . .
-WORKDIR "/src/FirstFlightSrvice"
-RUN dotnet build "FirstFlightSrvice.csproj" -c Release -o /app/build
+WORKDIR /src
+RUN dotnet build FirstFlightSrvice.csproj -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "FirstFlightSrvice.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish FirstFlightSrvice.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

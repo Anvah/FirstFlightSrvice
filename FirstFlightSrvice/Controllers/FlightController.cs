@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FirstFlightSrvice.Controllers
 {
-    //[Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class FlightController : ControllerBase
     {
         private readonly IFlightService _flightService;
@@ -14,18 +14,15 @@ namespace FirstFlightSrvice.Controllers
         { 
             _flightService= flightService;
         }
-
-        [Route("/getFligts")]
-        [HttpGet]
-        public async Task<IEnumerable<Flight>> GetFlights(CancellationToken cancellationToken, DateTime? date, decimal maxPrice = decimal.MaxValue, int maxTransfersCount = int.MaxValue)
+        [HttpGet("/getFlights")]
+        public async Task<IEnumerable<Flight>> GetFlights([FromQuery] DateTime? date, [FromQuery] decimal maxPrice = decimal.MaxValue, [FromQuery] int maxTransfersCount = int.MaxValue)
         {
-            return await _flightService.GetFlights(cancellationToken, date, maxPrice, maxTransfersCount);
+            return await _flightService.GetFlights(date, maxPrice, maxTransfersCount);
         }
-        [Route("/bookFlight")]
-        [HttpPost]
-        public async Task<Flight> Book(string Id, CancellationToken cancellationToken)
+        [HttpPost("/bookFlight/{id}")]
+        public async Task<Flight> Book(string id)
         {
-            return await _flightService.Book(Id, cancellationToken);
+            return await _flightService.Book(id);
         }
     }
 }

@@ -94,15 +94,15 @@ namespace FirstFlightSrvice.Services
 
 
             };
-        async public Task<Flight> Book(string Id, CancellationToken cancellationToken)
+        async public Task<Flight> Book(string Id)
         {
             var flight = firstFlights.FirstOrDefault(f => f.Id == Id);
-            if (flight != null)
+            if (flight != null && !flight.IsBooked)
                 flight.IsBooked = true;
             return flight;
         }
 
-        public async Task<IEnumerable<Flight>> GetFlights(CancellationToken cancellationToken, DateTime? date, decimal maxPrice = decimal.MaxValue, int maxTransfersCount = int.MaxValue)
+        public async Task<IEnumerable<Flight>> GetFlights(DateTime? date, decimal maxPrice = decimal.MaxValue, int maxTransfersCount = int.MaxValue)
         {
             var sortedFlight = firstFlights
                 .Where(f => (date == null || f.DeparturePoint.DepartureDataTime.Date == date?.Date)
