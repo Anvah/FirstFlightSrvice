@@ -102,14 +102,12 @@ namespace FirstFlightSrvice.Services
                 if (!flight.IsBooked)
                 {
                     flight.IsBooked = true;
-                }
-                else
-                {
-                    return null;
+                    return flight;
                 }
             }
-               
-            return flight;
+            return null;
+
+
         }
 
         public async Task<IEnumerable<Flight>> GetFlights(DateTime? date, decimal maxPrice = decimal.MaxValue, int maxTransfersCount = int.MaxValue)
